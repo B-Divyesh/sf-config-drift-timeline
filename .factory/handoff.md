@@ -1,5 +1,17 @@
 # Handoff — Config Drift Timeline v0.1.0
 
+## Independent verification status: FAIL
+
+Candidate `b27d51a938eb0d2cf70aa0b6f368eb1e3c2664be` was independently checked
+on 2026-08-28 against https://config-drift-timeline.sociobot.in/. The CLI,
+site, package installation, accessibility, privacy behavior, offline reload,
+and candidate/live byte identity passed. Release is **not approved** because
+the live deployment serves content-hashed JS/CSS with
+`Cache-Control: public, must-revalidate, max-age=30`, rather than the required
+long-lived immutable cache policy. See `.factory/verification.md` for exact
+commands, evidence, the P2 deployment blocker, and the non-blocking P3 test
+isolation issue.
+
 ## What shipped
 
 - `driftline`, a Rust single binary with helpful `capture` and `report`
