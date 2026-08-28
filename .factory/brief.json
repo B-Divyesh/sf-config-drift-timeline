@@ -1,0 +1,12 @@
+{
+  "slug": "config-drift-timeline",
+  "title": "Config Drift Timeline",
+  "territory": "devtools-data",
+  "user": "Platform engineers responsible for staging and production who need to explain when a meaningful configuration difference appeared and who introduced it.",
+  "smallest_useful_product": "A local CLI that ingests redacted dotenv/YAML/JSON snapshots from named environments, normalizes values, and emits a time-ordered semantic drift report with an allowlist.",
+  "success_measure": "In a pilot, an engineer identifies the first introduction of a seeded unsafe config difference in under five minutes without opening raw files.",
+  "artifact_class": "cli",
+  "monetization": "one-time",
+  "constraints": "Redact values by default; hash secret-like keys; support only read-only snapshot input; distinguish absent, null, and overridden values.",
+  "state": "RESEARCHED"
+}
