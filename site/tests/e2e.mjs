@@ -1,9 +1,24 @@
 import { spawn } from 'node:child_process';
+import { createServer } from 'node:net';
 import { chromium } from 'playwright';
 import AxeBuilder from '@axe-core/playwright';
 
-const port = 4178;
-const server = spawn(process.execPath, ['./node_modules/vite/bin/vite.js', 'preview', '--config', 'site/vite.config.ts', '--host', '127.0.0.1', '--port', String(port)], { stdio: 'inherit' });
+const reservePort = () => new Promise((resolve, reject) => {
+  const probe = createServer();
+  probe.once('error', reject);
+  probe.listen(0, '127.0.0.1', () => {
+    const address = probe.address();
+    if (!address || typeof address === 'string') {
+      probe.close();
+      reject(new Error('could not reserve a loopback port for the preview server'));
+      return;
+    }
+    probe.close((error) => error ? reject(error) : resolve(address.port));
+  });
+});
+
+const port = await reservePort();
+const server = spawn(process.execPath, ['./node_modules/vite/bin/vite.js', 'preview', '--config', 'site/vite.config.ts', '--host', '127.0.0.1', '--port', String(port), '--strictPort'], { stdio: 'inherit' });
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 try {

@@ -5,6 +5,7 @@ import test from 'node:test';
 const index = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 const main = readFileSync(new URL('../src/main.ts', import.meta.url), 'utf8');
 const css = readFileSync(new URL('../src/style.css', import.meta.url), 'utf8');
+const staticWebAppConfig = JSON.parse(readFileSync(new URL('../public/staticwebapp.config.json', import.meta.url), 'utf8'));
 
 test('main page ships required semantic landmarks and exactly one h1', () => {
   assert.match(index, /<html lang="en">/);
@@ -31,4 +32,15 @@ test('visual system includes designed focus and reduced-motion handling', () => 
 
 test('demo models unsafe, absent, overridden, and resolved states', () => {
   for (const state of ['INTRODUCED / UNSAFE', 'absent', 'overridden', 'RESOLVED']) assert.match(main, new RegExp(state));
+});
+
+test('deployment caches only content-hashed application assets immutably', () => {
+  const assetsRoute = staticWebAppConfig.routes?.find(({ route }) => route === '/assets/*');
+  assert.ok(assetsRoute, 'static host config must define an /assets/* route');
+  assert.equal(
+    assetsRoute.headers?.['Cache-Control'],
+    'public, max-age=31536000, immutable',
+    'Vite content-hashed JS and CSS must not fall back to the host 30-second cache policy'
+  );
+  assert.equal(staticWebAppConfig.globalHeaders?.['Cache-Control'], undefined, 'HTML and sw.js must remain revalidatable');
 });
