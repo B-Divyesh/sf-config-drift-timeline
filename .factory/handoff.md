@@ -68,14 +68,32 @@ hero remains under the 300 KiB mobile image budget.
 
 ## Deploy and post-deploy evidence
 
-Deployment is performed with the work-order static configuration:
+Deployed on 2026-08-28 UTC with the work-order static configuration:
 
 ```sh
 /opt/fleet/lib/deploy-static.sh config-drift-timeline dist/site
 ```
 
-Post-deploy URL, byte-identity, header, browser, privacy, and checkout-state
-evidence will be recorded here after the deployment completes.
+Live URL: <https://config-drift-timeline.sociobot.in/>.
+
+- The factory static deployment completed successfully and returned HTTPS 200.
+- Fresh production bytes exactly match `dist/site`: root HTML SHA-256
+  `fe1ade806871abb291683c7713ca33670d3d23dcfbde4e6d87ed2c92f895d8fc`, JS
+  `72c27fe230e42f3b5a58717eaf2c12337bdf92ce4ab1bf0265ab0172850b69f7`, and
+  CSS `78a8f1399e5480fa50a8a1a78b0e530f62e6b7883306ea01fc71bc56ab4e4ec3`.
+- `verify-url.sh` passed against production: 730 ms navigation, zero browser
+  console errors, English title/lang, exactly one h1, a main landmark, no
+  missing image alt text, and no unnamed buttons.
+- Live HTML contains only `id="purchase-button" disabled`; it contains no
+  production checkout URL, so the reproduced 404 cannot be reached from the
+  deployed product.
+- Response policy remains correct: HTTP redirects to HTTPS (301), HTML and
+  `sw.js` are revalidatable at 30 seconds, and Vite's hashed JS is
+  `public, max-age=31536000, immutable`. CSP, HSTS, nosniff, referrer policy,
+  and permissions policy are present.
+- Lighthouse 12.8.2 mobile report: performance 99, accessibility 100, best
+  practices 100, SEO 100; FCP 1.6 s, LCP 1.6 s, TBT 0 ms, CLS 0. The report
+  was written to `/tmp/config-drift-timeline-lighthouse.json`.
 
 ## Publishing
 
