@@ -149,7 +149,8 @@ driftline report --compare staging,production --fail-on-drift</code></pre>
             <li>Works offline after a successful license check</li>
             <li>Configuration data is never sent for verification</li>
           </ul>
-          <a class="button button-primary" href="https://api.sociobot.in/api/v1/products/config-drift-timeline/checkout" id="buy-link">Buy Pro incident pack — $39</a>
+          <button class="button button-primary" type="button" id="purchase-button" disabled aria-describedby="purchase-status">Buy Pro incident pack — $39</button>
+          <p class="purchase-status" id="purchase-status" role="status">Pro checkout is being prepared. You can still restore a previously purchased license below.</p>
           <p class="legal-note">Sociobot/Dodo is the merchant of record and handles refunds. A refund revokes the license. See <a href="/privacy/">privacy</a> and <a href="/terms/">terms</a>.</p>
         </div>
         <div class="license-card" aria-labelledby="license-title">

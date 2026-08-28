@@ -102,11 +102,18 @@ syncNetworkState();
 
 const PRODUCT = 'config-drift-timeline';
 const API_BASE = 'https://api.sociobot.in/api/v1';
+const CHECKOUT_URL = `${API_BASE}/products/${PRODUCT}/checkout`;
+// This must be explicitly enabled only after the factory has registered the
+// matching production product. A disabled checkout is safer than a paid link
+// that leads a buyer to a 404 page.
+const checkoutEnabled = import.meta.env.VITE_PRO_CHECKOUT_ENABLED === 'true';
 const LICENSE_KEY = `sb_license:${PRODUCT}`;
 const VERDICT_KEY = `sb_license_verdict:${PRODUCT}`;
 const ONE_DAY = 86_400_000;
 const licenseStatus = byId('license-status');
 const downloadButton = byId<HTMLButtonElement>('download-pack');
+const purchaseButton = byId<HTMLButtonElement>('purchase-button');
+const purchaseStatus = byId('purchase-status');
 
 type Verdict = { token: string; valid: boolean; checkedAt: number; reason: string };
 
@@ -126,6 +133,13 @@ function setUnlocked(unlocked: boolean, message: string) {
   downloadButton.hidden = !unlocked;
   licenseStatus.className = `license-status ${unlocked ? 'verified' : ''}`;
   licenseStatus.textContent = message;
+}
+
+function configureCheckout() {
+  if (!checkoutEnabled) return;
+  purchaseButton.disabled = false;
+  purchaseStatus.hidden = true;
+  purchaseButton.addEventListener('click', () => window.location.assign(CHECKOUT_URL));
 }
 
 async function verifyLicense(token: string, force = false) {
@@ -187,4 +201,5 @@ if ('serviceWorker' in navigator && location.protocol !== 'file:') {
   window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(() => undefined));
 }
 
+configureCheckout();
 renderStep(0);

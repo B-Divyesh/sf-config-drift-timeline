@@ -30,6 +30,11 @@ try {
     const errors = [];
     page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });
     await page.goto(`http://127.0.0.1:${port}/`, { waitUntil: 'networkidle' });
+    const purchaseButton = page.getByRole('button', { name: 'Buy Pro incident pack — $39' });
+    if (!await purchaseButton.isDisabled()) throw new Error('checkout must stay disabled until the factory registers the production product');
+    const urlBeforePurchaseAttempt = page.url();
+    await purchaseButton.click({ force: true, timeout: 1000 }).catch(() => undefined);
+    if (page.url() !== urlBeforePurchaseAttempt) throw new Error('disabled checkout attempted to navigate away from the product');
     await page.locator('#next-step').click();
     await page.getByText('DATABASE.REPLICA_COUNT').waitFor();
     await page.locator('#timeline').focus();

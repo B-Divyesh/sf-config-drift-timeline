@@ -7,6 +7,9 @@ versioning.
 
 ### Fixed
 
+- Fail closed for an unregistered Pro product: ordinary site builds do not
+  expose a checkout action that can lead to a Sociobot 404. The factory must
+  explicitly enable checkout after billing registration.
 - Configure the static host to cache Vite content-hashed `/assets/*` files for
   one year with `immutable`, while keeping HTML and the service worker
   revalidatable.

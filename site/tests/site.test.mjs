@@ -21,7 +21,14 @@ test('paid unlock follows the Sociobot token and daily verification contract', (
   assert.match(main, /history\.replaceState/);
   assert.match(main, /\/verify\?license=/);
   assert.match(main, /86_400_000/);
-  assert.match(index, /\/products\/config-drift-timeline\/checkout/);
+});
+
+test('unregistered checkout is fail-closed until an explicit release setting enables it', () => {
+  assert.match(index, /<button[^>]*id="purchase-button"[^>]*disabled/);
+  assert.doesNotMatch(index, /href="https:\/\/api\.sociobot\.in\/api\/v1\/products\/config-drift-timeline\/checkout"/);
+  assert.match(main, /VITE_PRO_CHECKOUT_ENABLED === 'true'/);
+  assert.match(main, /window\.location\.assign\(CHECKOUT_URL\)/);
+  assert.match(main, /purchaseButton\.disabled = false/);
 });
 
 test('visual system includes designed focus and reduced-motion handling', () => {

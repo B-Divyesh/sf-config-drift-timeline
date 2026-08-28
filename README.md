@@ -83,6 +83,11 @@ Use a ledger path outside source control if even key names are sensitive.
 
 The static landing/docs site includes a browser-only recorded demo and the
 one-time Pro incident-pack license flow. It sends configuration data nowhere.
+Checkout is deliberately disabled in ordinary builds until the factory has
+registered the matching Sociobot product; this prevents a buyer being sent to
+a broken checkout. After registration, the release worker enables it with
+`VITE_PRO_CHECKOUT_ENABLED=true` when building the site. Existing licenses can
+always be restored and verified.
 
 ```sh
 npm install
