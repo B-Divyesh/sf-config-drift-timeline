@@ -32,6 +32,11 @@ try {
     await page.goto(`http://127.0.0.1:${port}/`, { waitUntil: 'networkidle' });
     await page.locator('#next-step').click();
     await page.getByText('DATABASE.REPLICA_COUNT').waitFor();
+    await page.locator('#timeline').focus();
+    await page.keyboard.press('ArrowRight');
+    await page.getByText('PAYMENTS_WEBHOOK_SECRET').waitFor();
+    await page.keyboard.press('ArrowLeft');
+    await page.getByText('DATABASE.REPLICA_COUNT').waitFor();
     const results = await new AxeBuilder({ page }).analyze();
     const serious = results.violations.filter((violation) => ['serious', 'critical'].includes(violation.impact ?? ''));
     if (serious.length) throw new Error(`axe violations at ${viewport.width}px: ${serious.map((v) => v.id).join(', ')}`);
@@ -40,8 +45,17 @@ try {
     if (overflow) throw new Error(`horizontal overflow at ${viewport.width}px`);
     await context.close();
   }
+  const offlineContext = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  const offlinePage = await offlineContext.newPage();
+  await offlinePage.goto(`http://127.0.0.1:${port}/`, { waitUntil: 'networkidle' });
+  await offlinePage.evaluate(() => navigator.serviceWorker.ready);
+  await offlinePage.reload({ waitUntil: 'networkidle' });
+  await offlineContext.setOffline(true);
+  await offlinePage.reload({ waitUntil: 'domcontentloaded' });
+  await offlinePage.getByRole('heading', { name: 'Find the first bad difference.' }).waitFor();
+  await offlineContext.close();
   await browser.close();
-  console.log('E2E: desktop/mobile, demo, console, overflow, and axe checks passed');
+  console.log('E2E: desktop/mobile, keyboard demo, offline reload, console, overflow, and axe checks passed');
 } finally {
   server.kill('SIGTERM');
 }
