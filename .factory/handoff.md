@@ -59,8 +59,8 @@ cargo package
   5 site contract tests, and Playwright 1.58.2 browser checks.
 - Browser checks passed at desktop 1280px and mobile 390px: no console errors,
   no horizontal overflow, no axe serious/critical violations, click and
-  Arrow-key timeline operation, and an offline shell reload after service
-  worker activation. A separate live-browser run passed at both viewport
+  Arrow-key timeline operation, a service-worker update check, and an offline
+  shell reload after service worker activation. A separate live-browser run passed at both viewport
   sizes with the same keyboard, console, overflow, and axe checks.
 - `cargo clippy --all-targets -- -D warnings` passed. `npm run build` produced
   `target/release/driftline` and `dist/site`.

@@ -50,12 +50,18 @@ try {
   await offlinePage.goto(`http://127.0.0.1:${port}/`, { waitUntil: 'networkidle' });
   await offlinePage.evaluate(() => navigator.serviceWorker.ready);
   await offlinePage.reload({ waitUntil: 'networkidle' });
+  const updateChecked = await offlinePage.evaluate(async () => {
+    const registration = await navigator.serviceWorker.ready;
+    await registration.update();
+    return navigator.serviceWorker.controller !== null;
+  });
+  if (!updateChecked) throw new Error('service worker did not control the page after its update check');
   await offlineContext.setOffline(true);
   await offlinePage.reload({ waitUntil: 'domcontentloaded' });
   await offlinePage.getByRole('heading', { name: 'Find the first bad difference.' }).waitFor();
   await offlineContext.close();
   await browser.close();
-  console.log('E2E: desktop/mobile, keyboard demo, offline reload, console, overflow, and axe checks passed');
+  console.log('E2E: desktop/mobile, keyboard demo, service-worker update, offline reload, console, overflow, and axe checks passed');
 } finally {
   server.kill('SIGTERM');
 }
