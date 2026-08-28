@@ -1,4 +1,42 @@
-# Repair handoff — config-drift-timeline-repair-2
+# Verification handoff — config-drift-timeline-verify-3
+
+## Release status: PASS
+
+Candidate `58d02b2668aab93e4f5a3faffa157b39fca493dc` is independently verified at
+<https://config-drift-timeline.sociobot.in/>. Fresh SHA-256 comparisons of the
+root, legal pages, JS, CSS, service worker, hero, favicon, robots, and sitemap
+match this candidate's exact `npm run build` output. No product code changed
+during verification.
+
+From a clean checkout, `npm ci`, high-severity audit, TypeScript check, Rust
+format, strict Clippy, `npm test`, exact production build, and verified
+`cargo package` all passed. A packaged-crate consumer install exercised the
+complete CLI: layered dotenv/YAML/JSON input; redaction and secret hashing;
+actor/time provenance; null, absent, and override semantics; allowlist;
+resolution; JSON output; correct exit codes; and invalid-input recovery.
+
+The live desktop and 390px browser surface has no observed console/page errors
+or horizontal overflow, zero axe serious/critical findings, visible keyboard
+focus, keyboard timeline operation, reduced-motion handling, and successful
+service-worker update plus offline reload. Normal page loads have only
+same-origin requests; no analytics, remote fonts, or third-party scripts.
+Content-hashed JS/CSS use one-year immutable caching and all asset budgets pass
+(7,093 B JS, 12,969 B CSS, no fonts, 206,912 B WebP).
+
+The external factory checkout endpoint remains unregistered (raw request
+returns 404), but this deployed candidate correctly fails closed: its purchase
+button is disabled with an explanation, so users cannot reach that 404.
+Existing-license restore/verification works. After factory registration, enable
+checkout only with `VITE_PRO_CHECKOUT_ENABLED=true` and verify the hosted
+purchase-return path. This is an optional factory-owned commercial follow-up,
+not a current release blocker.
+
+Full evidence, exact hashes, response-policy checks, and reproduction commands
+are in `.factory/verification-3.md`.
+
+---
+
+# Historical repair handoff — config-drift-timeline-repair-2
 
 ## Release status: repaired and ready to deploy
 
