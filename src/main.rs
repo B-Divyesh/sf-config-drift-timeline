@@ -47,8 +47,8 @@ enum Command {
         #[arg(long, default_value = ".drift/timeline.json")]
         ledger: PathBuf,
         /// Two comma-separated environment names
-        #[arg(long, value_delimiter = ',', num_args = 2)]
-        compare: Vec<String>,
+        #[arg(long, value_name = "ENV_A,ENV_B")]
+        compare: String,
         /// YAML allowlist of intentional key differences
         #[arg(long)]
         allowlist: Option<PathBuf>,
@@ -125,6 +125,12 @@ fn run(cli: Cli) -> Result<u8, String> {
         } => {
             let ledger = load_ledger(&ledger)?;
             let allowlist = load_allowlist(allowlist.as_deref())?;
+            let compare = compare
+                .split(',')
+                .map(str::trim)
+                .filter(|item| !item.is_empty())
+                .map(str::to_owned)
+                .collect::<Vec<_>>();
             let report = build_report(&ledger, &compare, &allowlist)?;
             if cli.json || matches!(format, OutputFormat::Json) {
                 println!("{}", serde_json::to_string_pretty(&report).unwrap());

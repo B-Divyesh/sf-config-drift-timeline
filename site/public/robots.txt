@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://config-drift-timeline.sociobot.in/sitemap.xml
