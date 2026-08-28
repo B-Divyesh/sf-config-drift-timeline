@@ -1,0 +1,6 @@
+http:
+  port: 8080
+database:
+  replica_count: 3
+payments:
+  webhook_secret: null

@@ -1,0 +1,31 @@
+[package]
+name = "config-drift-timeline"
+version = "0.1.0"
+edition = "2024"
+description = "Explain when configuration environments diverged and who introduced it"
+license = "MIT"
+repository = "https://github.com/B-Divyesh/sf-config-drift-timeline"
+readme = "README.md"
+keywords = ["configuration", "drift", "devops", "cli"]
+categories = ["command-line-utilities", "development-tools"]
+
+[[bin]]
+name = "driftline"
+path = "src/main.rs"
+
+[dependencies]
+chrono = { version = "0.4", default-features = false, features = ["std"] }
+clap = { version = "4.5", features = ["derive"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+serde_yaml = "0.9"
+sha2 = "0.10"
+
+[dev-dependencies]
+tempfile = "3"
+
+[profile.release]
+lto = true
+codegen-units = 1
+strip = true
+
