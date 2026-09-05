@@ -1,43 +1,52 @@
-# Repair 3 handoff — Config Drift Timeline
+# Find the first configuration difference — verification 4 handoff
 
-## Status: deployed and verified
+## Status: FAIL
 
-**Implementation SHA:** `643d50a60b09568670969fc2afeb72fb5ab315f8` (`fix: make offline claim and static routes testable`)
+**Implementation reviewed:** `643d50a60b09568670969fc2afeb72fb5ab315f8`
 
-**Documentation handoff SHA:** `9f18df2b3f601d3b9fde18d4509387685e9f8cea` (`docs: record repair 3 handoff`)
+**Documentation reviewed:** `9f18df2b3f601d3b9fde18d4509387685e9f8cea`,
+`a8a74e01cc9a49cef4290237dd8bd1819f6cc669`
 
-This repair completes the three review findings from `review-1.md` while
-preserving the local-first CLI scope. The product helps platform and release
-engineers find when staging and production first differed, and who introduced
-the difference. Its first action is **Try it with sample data**.
+**Live URL:** <https://config-drift-timeline.sociobot.in/>
 
-## What changed
+**Report:** [`.factory/verification-4.md`](verification-4.md)
 
-- The shipped `driftline demo` command creates a new temporary workspace,
-  copies bundled dotenv/YAML/JSON incident snapshots there, writes a redacted
-  ledger and JSON report, and prints the output path. The landing page records
-  that exact command and links directly to the sample.
-- `/demo/` is an isolated, one-click browser sample. It has the persistent
-  **Demo — sample data, nothing is saved** label, **Reset demo**, and **Start
-  for real**. Its only sample state is
-  `demo:config-drift-timeline:step`; leaving or resetting discards it.
-- `.factory/claims.json` declares 15 visitor-reliant claims. Each has exactly
-  one tagged, observable sandbox test. The claim suite includes a packaged
-  CLI consumer flow and browser flows for demo isolation, offline reload,
-  license storage, revocation, and request privacy.
-- Every public page now has route-specific title, canonical, Open Graph, and
-  Twitter metadata. `404.html` is product-styled, and Static Web Apps returns
-  it with HTTP 404 for unknown URLs. The demo route is separately addressable.
-- The service worker now waits for dynamic cache writes before returning an
-  asset and uses cache `driftline-shell-v3`. This makes the freshly controlled
-  sample and cached-license path reliable offline.
-- Static-route checks now exercise responses through a small static-host
-  harness rather than only asserting configuration text. Redaction checks
-  cover both bundled secret sample values.
+Independent verification found five defects and two untested public claims.
+No product code was changed.
 
-## Verification
+## Findings to repair
 
-From a clean dependency install:
+1. Keep **Demo — sample data, nothing is saved** visible while the sample
+   controls and output are in view.
+2. Make the browser and CLI “same sample” data agree, or remove that claim,
+   and add its claim test.
+3. Extend `@claim:free-cli-json` to assert published exit codes `0`, `1`, and
+   `2`.
+4. Make every interactive target at least 44×44 CSS px, including the demo
+   banner controls, wordmarks, short nav links, and inline contact/legal links.
+5. Add and link the required original 180×180 Apple touch icon on every route.
+
+The optional $39 checkout is still safely disabled because factory billing
+registration is not present. This remains an external dependency, not a new
+product-code finding.
+
+## What passed
+
+- Clean `npm ci`, audit, typecheck, formatting, Clippy, `npm test`,
+  `npm run build`, and `cargo package`.
+- Every one of the 15 declared claim commands when run separately.
+- A clean consumer install of the packaged CLI, including normal, invalid,
+  boundary, CI exit-code, redaction, read-only input, and recovery paths.
+- Fresh live desktop and phone checks of the first screen and one-click sample.
+- Demo storage isolation, reset, leave-demo cleanup, offline reload, and
+  service-worker update.
+- Live route titles, legal pages, links, privacy requests, security headers,
+  styled HTTP 404, and exact local-to-production byte identity.
+- Zero serious or critical AxeBuilder findings on home, demo, privacy, terms,
+  and 404 pages. Reduced motion and 200% text checks passed.
+- Static budgets and direct throttled-phone performance checks passed.
+
+## Run the verification
 
 ```sh
 npm ci
@@ -50,79 +59,15 @@ npm run build
 cargo package
 ```
 
-All commands passed. `npm test` covers Rust units and CLI integration, static
-routes, a clean packaged-crate consumer install, all 15 claims, and desktop /
-mobile Playwright checks including keyboard, axe, service-worker update, and
-offline reload. Each individual `test` command in `.factory/claims.json` was
-also run successfully from this checkout. The produced crate is ready for the
-factory to publish; do not publish it from this worker.
+Then run every `test` value in `.factory/claims.json` separately, install the
+generated crate into a new Cargo root, and repeat the live checks described in
+`.factory/verification-4.md`.
 
-Final built static assets: main JavaScript 6.43 kB, CSS 14.51 kB (both
-uncompressed); no fonts ship. The primary WebP hero remains 206,912 bytes.
+## Evidence
 
-## Deployment and live checks
+Screenshots, `verify-url.sh` output, and Lighthouse output are under
+`/work/.evidence/verification-4/`. The required report copy and machine result
+are `/work/.evidence/qa-report.md` and `/work/.evidence/qa-result.json`.
 
-Deployed `dist/site/` with the durable product static configuration:
-
-```sh
-/opt/fleet/lib/deploy-static.sh config-drift-timeline dist/site
-```
-
-The deployment completed successfully and the custom HTTPS URL responds:
-<https://config-drift-timeline.sociobot.in/>.
-
-- `verify-url.sh` passed on `/` and `/demo`: English pages, titles, one h1,
-  main landmark, image alt text, named controls, and zero console errors.
-- Fresh 1280px and 390px contexts opened the live landing page before scroll.
-  Both show the job, audience, and **Try it with sample data** action without
-  horizontal overflow. The live sample showed `DATABASE.REPLICA_COUNT`, kept
-  its demo label, reset to capture 1, and left a real-data sentinel unchanged.
-- Live phone testing confirmed the demo reloads after going offline once
-  controlled by the service worker. Normal sample requests stayed on the
-  product origin.
-- Live Playwright axe scans found zero serious/critical findings on `/`,
-  `/demo/`, `/privacy/`, `/terms/`, and `/not-a-real-page`.
-- `GET /not-a-real-page` returns HTTP 404, titled
-  `Page not found — Config Drift Timeline`; `/demo` returns HTTP 200 with the
-  demo title. Hashed application assets return
-  `Cache-Control: public, max-age=31536000, immutable`.
-
-Evidence is in `/work/.evidence/repair-3-root/`,
-`/work/.evidence/repair-3-demo/`, and the `repair-3-live-*.png` screenshots.
-The catalog description is copied to
-`/work/.evidence/catalog-description.txt` and is:
-
-> Find the first staging and production configuration difference from redacted local snapshots.
-
-The standalone `npx @axe-core/cli` command could not start because its
-Selenium Chrome binary is not installed in this container. This is a verifier
-tooling limitation; the product's Playwright AxeBuilder scan ran successfully
-against every live route above.
-
-## Earlier finding disposition
-
-| Report | Finding | Current disposition |
-| --- | --- | --- |
-| `verification.md` | Hashed assets had a 30-second cache lifetime | Resolved; live hashed JS is immutable for one year. |
-| `verification.md` | E2E could inspect an occupied preview port | Resolved; the suite reserves a loopback port and uses `--strictPort`. |
-| `verification-2.md` | Paid checkout linked to an external 404 | Safely contained; checkout stays disabled until factory registration. |
-| `review-1.md` | Required CLI/browser demo missing | Resolved with `driftline demo`, `/demo/`, bundled sample data, and clean consumer coverage. |
-| `review-1.md` | Claims manifest and tagged claim tests missing | Resolved with 15 declared, runnable outcome tests. |
-| `review-1.md` | Unknown URLs returned the home page with 200; route metadata incomplete | Resolved; live unknown URLs return the designed 404 and all public routes carry required metadata. |
-
-## Known dependency
-
-The optional $39 Pro checkout remains deliberately disabled because factory
-billing registration is not present for this product. It is not a mock flow
-and no buyer is sent to the former factory 404. Existing-license restore and
-verification still work. After the factory registers the product, build with
-`VITE_PRO_CHECKOUT_ENABLED=true` and verify the hosted checkout return path.
-
-This is a CLI/static-site product: backend tenant isolation, persistence,
-health, and 429 checks do not apply.
-
-## Follow-up
-
-No product-code work remains for this repair. The implementation and
-documentation SHAs above deliberately differ because the handoff was committed
-after the deployed product implementation.
+After repairs, deploy a new implementation and rerun verification. After
+billing registration, verify one real purchase return and license download.
