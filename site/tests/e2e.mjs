@@ -37,12 +37,12 @@ try {
     await purchaseButton.click({ force: true, timeout: 1000 }).catch(() => undefined);
     if (page.url() !== urlBeforePurchaseAttempt) throw new Error('disabled checkout attempted to navigate away from the product');
     await page.locator('#next-step').click();
-    await page.getByText('DATABASE.REPLICA_COUNT').waitFor();
+    await page.getByRole('heading', { name: 'DATABASE.REPLICA_COUNT' }).waitFor();
     await page.locator('#timeline').focus();
     await page.keyboard.press('ArrowRight');
-    await page.getByText('PAYMENTS_WEBHOOK_SECRET').waitFor();
+    await page.getByRole('heading', { name: 'PAYMENTS_WEBHOOK_SECRET' }).waitFor();
     await page.keyboard.press('ArrowLeft');
-    await page.getByText('DATABASE.REPLICA_COUNT').waitFor();
+    await page.getByRole('heading', { name: 'DATABASE.REPLICA_COUNT' }).waitFor();
     const results = await new AxeBuilder({ page }).analyze();
     const serious = results.violations.filter((violation) => ['serious', 'critical'].includes(violation.impact ?? ''));
     if (serious.length) throw new Error(`axe violations at ${viewport.width}px: ${serious.map((v) => v.id).join(', ')}`);
