@@ -4,6 +4,8 @@
 
 **Implementation SHA:** `643d50a60b09568670969fc2afeb72fb5ab315f8` (`fix: make offline claim and static routes testable`)
 
+**Documentation handoff SHA:** `9f18df2b3f601d3b9fde18d4509387685e9f8cea` (`docs: record repair 3 handoff`)
+
 This repair completes the three review findings from `review-1.md` while
 preserving the local-first CLI scope. The product helps platform and release
 engineers find when staging and production first differed, and who introduced
@@ -121,6 +123,6 @@ health, and 429 checks do not apply.
 
 ## Follow-up
 
-No product-code work remains for this repair. A later documentation-only commit
-records this handoff; it should be reported separately from implementation SHA
-`643d50a60b09568670969fc2afeb72fb5ab315f8`.
+No product-code work remains for this repair. The implementation and
+documentation SHAs above deliberately differ because the handoff was committed
+after the deployed product implementation.
