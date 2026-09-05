@@ -1,0 +1,4 @@
+{
+  "http": { "port": 8080, "keep_alive_seconds": 30 },
+  "release": { "channel": "stable" }
+}

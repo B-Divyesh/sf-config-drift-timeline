@@ -3,8 +3,10 @@ use config_drift_timeline::{
     Classification, build_report, capture, load_allowlist, load_ledger, render_terminal,
 };
 use serde_json::json;
+use std::fs;
 use std::path::PathBuf;
 use std::process::ExitCode;
+use std::time::{SystemTime, UNIX_EPOCH};
 
 #[derive(Parser)]
 #[command(
@@ -23,6 +25,8 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Command {
+    /// Run the bundled incident in a new temporary directory
+    Demo,
     /// Capture one environment snapshot into a redacted local ledger
     Capture {
         /// Environment name, such as staging or production
@@ -81,6 +85,7 @@ fn main() -> ExitCode {
 
 fn run(cli: Cli) -> Result<u8, String> {
     match cli.command {
+        Command::Demo => run_demo(),
         Command::Capture {
             env,
             at,
@@ -144,4 +149,67 @@ fn run(cli: Cli) -> Result<u8, String> {
             Ok(if fail_on_drift && unsafe_active { 1 } else { 0 })
         }
     }
+}
+
+fn run_demo() -> Result<u8, String> {
+    let nonce = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .map_err(|_| "could not create a timestamp for the demo workspace".to_string())?
+        .as_nanos();
+    let workspace =
+        std::env::temp_dir().join(format!("driftline-demo-{}-{nonce}", std::process::id()));
+    fs::create_dir(&workspace).map_err(|error| {
+        format!(
+            "could not create demo workspace {}: {error}",
+            workspace.display()
+        )
+    })?;
+
+    let staging = workspace.join("staging.yaml");
+    let production = workspace.join("production.yaml");
+    let shared_dotenv = workspace.join("demo.env");
+    let shared_json = workspace.join("demo.json");
+    let ledger = workspace.join("timeline.json");
+    let report_path = workspace.join("drift-report.json");
+    fs::write(&staging, include_str!("../examples/staging.yaml"))
+        .map_err(|error| format!("could not write demo staging snapshot: {error}"))?;
+    fs::write(&production, include_str!("../examples/production.yaml"))
+        .map_err(|error| format!("could not write demo production snapshot: {error}"))?;
+    fs::write(&shared_dotenv, include_str!("../examples/demo.env"))
+        .map_err(|error| format!("could not write demo dotenv layer: {error}"))?;
+    fs::write(&shared_json, include_str!("../examples/demo.json"))
+        .map_err(|error| format!("could not write demo JSON layer: {error}"))?;
+
+    capture(
+        &ledger,
+        "staging",
+        "2026-08-28T09:00:00Z",
+        "deploy-bot",
+        &[staging, shared_dotenv.clone(), shared_json.clone()],
+    )?;
+    capture(
+        &ledger,
+        "production",
+        "2026-08-28T10:42:00Z",
+        "priya",
+        &[production, shared_dotenv, shared_json],
+    )?;
+    let report = build_report(
+        &load_ledger(&ledger)?,
+        &["staging".to_string(), "production".to_string()],
+        &load_allowlist(None)?,
+    )?;
+    fs::write(
+        &report_path,
+        serde_json::to_vec_pretty(&report)
+            .map_err(|error| format!("could not encode demo report: {error}"))?,
+    )
+    .map_err(|error| format!("could not write demo report: {error}"))?;
+
+    println!("DEMO  Config Drift Timeline");
+    println!("Sample workspace: {}", workspace.display());
+    print!("{}", render_terminal(&report));
+    println!("Demo report: {}", report_path.display());
+    println!("The sample stays in this temporary directory. Your files were not read or changed.");
+    Ok(0)
 }

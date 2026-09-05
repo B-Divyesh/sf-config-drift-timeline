@@ -1,0 +1,107 @@
+[
+  {
+    "id": "raw-values-redacted",
+    "claim": "Raw configuration values never enter the ledger or report.",
+    "where": "landing facts, README, privacy page",
+    "test": "npm run test:claims -- --grep=@claim:raw-values-redacted",
+    "sandbox": "Run the bundled CLI demo and inspect its temporary ledger and JSON report."
+  },
+  {
+    "id": "dotenv-yaml-json",
+    "claim": "The CLI accepts dotenv, YAML, and JSON snapshots.",
+    "where": "landing facts, README",
+    "test": "npm run test:claims -- --grep=@claim:dotenv-yaml-json",
+    "sandbox": "Run the bundled CLI demo and inspect its recorded source extensions."
+  },
+  {
+    "id": "cli-no-telemetry",
+    "claim": "The CLI sends no telemetry.",
+    "where": "landing facts, privacy page",
+    "test": "npm run test:claims -- --grep=@claim:cli-no-telemetry",
+    "sandbox": "Run the bundled CLI demo with every common proxy variable pointed at a local recording proxy."
+  },
+  {
+    "id": "local-only-snapshots",
+    "claim": "Snapshot processing stays on your machine.",
+    "where": "README, privacy page",
+    "test": "npm run test:claims -- --grep=@claim:local-only-snapshots",
+    "sandbox": "Run the bundled CLI demo and assert that it creates only a new temporary workspace and does not alter shipped input."
+  },
+  {
+    "id": "null-absent-overridden",
+    "claim": "The report distinguishes null, absent, and overridden values.",
+    "where": "landing semantic states, README",
+    "test": "npm run test:claims -- --grep=@claim:null-absent-overridden",
+    "sandbox": "Run the bundled CLI demo and inspect its redacted ledger and report states."
+  },
+  {
+    "id": "first-introduction",
+    "claim": "The report names when a difference was first observed and who introduced it.",
+    "where": "landing headline, README",
+    "test": "npm run test:claims -- --grep=@claim:first-introduction",
+    "sandbox": "Run the bundled CLI demo and assert the seeded actor, environment, and timestamp."
+  },
+  {
+    "id": "demo-isolated",
+    "claim": "The browser sample does not read or change real data.",
+    "where": "demo route, privacy page",
+    "test": "npm run test:claims -- --grep=@claim:demo-isolated",
+    "sandbox": "Fresh browser context with a real-data sentinel; change and reset the demo."
+  },
+  {
+    "id": "offline-reload",
+    "claim": "The sample works offline after the first visit.",
+    "where": "offline status, reviewable demo behavior",
+    "test": "npm run test:claims -- --grep=@claim:offline-reload",
+    "sandbox": "Fresh mobile browser context, visit the sample once, then reload it offline."
+  },
+  {
+    "id": "free-cli-json",
+    "claim": "Core CLI analysis, JSON output, and CI exit codes remain free.",
+    "where": "landing Pro section, README",
+    "test": "npm run test:claims -- --grep=@claim:free-cli-json",
+    "sandbox": "Use the bundled CLI demo ledger with JSON output and the CI drift exit code without a license."
+  },
+  {
+    "id": "pro-one-time-price",
+    "claim": "The optional Pro incident pack is a one-time $39 purchase.",
+    "where": "landing Pro section, terms page",
+    "test": "npm run test:claims -- --grep=@claim:pro-one-time-price",
+    "sandbox": "Fresh browser context verifies the visible product price and one-time terms."
+  },
+  {
+    "id": "offline-cached-license",
+    "claim": "A previously verified Pro license works offline.",
+    "where": "landing Pro section, terms page",
+    "test": "npm run test:claims -- --grep=@claim:offline-cached-license",
+    "sandbox": "Fresh browser context with a stored successful verdict, then an offline reload."
+  },
+  {
+    "id": "license-token-only",
+    "claim": "License verification sends only the license token.",
+    "where": "landing license help, privacy page",
+    "test": "npm run test:claims -- --grep=@claim:license-token-only",
+    "sandbox": "Intercept a routed license return and inspect the verification request."
+  },
+  {
+    "id": "browser-only-license-storage",
+    "claim": "A returned license is stored only in this browser.",
+    "where": "landing license help, privacy page",
+    "test": "npm run test:claims -- --grep=@claim:browser-only-license-storage",
+    "sandbox": "Fresh browser context receives a token and checks scoped local storage, cookies, and the cleaned URL."
+  },
+  {
+    "id": "refund-revocation",
+    "claim": "A refund revokes the associated Pro license.",
+    "where": "landing legal note, terms page",
+    "test": "npm run test:claims -- --grep=@claim:refund-revocation",
+    "sandbox": "Mock the documented revoked verification response and assert the pack stays locked."
+  },
+  {
+    "id": "first-party-site",
+    "claim": "The site uses no third-party resources or analytics.",
+    "where": "privacy page",
+    "test": "npm run test:claims -- --grep=@claim:first-party-site",
+    "sandbox": "Record every request in a fresh browser sample load and assert only the product origin occurs."
+  }
+]

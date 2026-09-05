@@ -20,6 +20,20 @@ driftline --help
 
 The release-ready package can be checked with `cargo package`.
 
+## Try the bundled sample
+
+Run the full CLI job without preparing files:
+
+```sh
+driftline demo
+```
+
+It creates a new temporary directory containing bundled YAML, dotenv, and
+JSON snapshots, then prints the redacted report path. The sample shows the
+first unsafe production difference, a secret-like key versus null, an absent
+key, and a JSON override. It does not read or change your files. See
+[`.factory/demo.md`](.factory/demo.md) for browser and CLI sandbox details.
+
 ## Usage
 
 Capture the same release in each environment. Later `--source` arguments
@@ -79,10 +93,14 @@ look secret (`TOKEN`, `PASSWORD`, `SECRET`, `API_KEY`, and similar) are marked
 `secret`; null, absent, and values overridden by later layers remain distinct.
 Use a ledger path outside source control if even key names are sensitive.
 
-## Site
+## Site and browser sample
 
-The static landing/docs site includes a browser-only recorded demo and the
-one-time Pro incident-pack license flow. It sends configuration data nowhere.
+The static landing/docs site has a one-click browser sample at
+`/demo/`. It uses a separate `demo:config-drift-timeline:*` local-storage
+namespace, shows a persistent sample label, and can be reset without touching
+real data. It sends configuration data nowhere.
+
+The optional one-time $39 Pro incident pack has a browser-only license flow.
 Checkout is deliberately disabled in ordinary builds until the factory has
 registered the matching Sociobot product; this prevents a buyer being sent to
 a broken checkout. After registration, the release worker enables it with
@@ -90,7 +108,7 @@ a broken checkout. After registration, the release worker enables it with
 always be restored and verified.
 
 ```sh
-npm install
+npm ci
 npm run dev
 npm run build:site   # writes dist/site
 ```
@@ -102,6 +120,10 @@ npm test             # Rust tests + site tests
 npm run build        # release binary + dist/site
 cargo package
 ```
+
+Every public claim is listed with its tagged sandbox test in
+[`.factory/claims.json`](.factory/claims.json). Run all claim checks with
+`npm run test:claims`, or run an individual declared command from that file.
 
 ## Deploy
 

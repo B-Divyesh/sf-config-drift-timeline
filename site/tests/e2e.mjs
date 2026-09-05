@@ -30,6 +30,7 @@ try {
     const errors = [];
     page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });
     await page.goto(`http://127.0.0.1:${port}/`, { waitUntil: 'networkidle' });
+    await page.getByRole('link', { name: 'Try it with sample data' }).waitFor();
     const purchaseButton = page.getByRole('button', { name: 'Buy Pro incident pack — $39' });
     if (!await purchaseButton.isDisabled()) throw new Error('checkout must stay disabled until the factory registers the production product');
     const urlBeforePurchaseAttempt = page.url();
@@ -63,7 +64,7 @@ try {
   if (!updateChecked) throw new Error('service worker did not control the page after its update check');
   await offlineContext.setOffline(true);
   await offlinePage.reload({ waitUntil: 'domcontentloaded' });
-  await offlinePage.getByRole('heading', { name: 'Find the first bad difference.' }).waitFor();
+  await offlinePage.getByRole('heading', { name: 'Find the first bad configuration difference.' }).waitFor();
   await offlineContext.close();
   await browser.close();
   console.log('E2E: desktop/mobile, keyboard demo, service-worker update, offline reload, console, overflow, and axe checks passed');

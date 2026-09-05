@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Try the Config Drift Timeline sample without reading or changing configuration files.">
+    <meta name="theme-color" content="#f4f0e6">
+    <title>Demo — Config Drift Timeline</title>
+    <link rel="canonical" href="https://config-drift-timeline.sociobot.in/demo/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Demo — Config Drift Timeline">
+    <meta property="og:description" content="Try a sample configuration drift timeline without reading or changing configuration files.">
+    <meta property="og:url" content="https://config-drift-timeline.sociobot.in/demo/">
+    <meta property="og:image" content="https://config-drift-timeline.sociobot.in/art/social-preview.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Demo — Config Drift Timeline">
+    <meta name="twitter:description" content="Try a sample configuration drift timeline without reading or changing configuration files.">
+    <meta name="twitter:image" content="https://config-drift-timeline.sociobot.in/art/social-preview.jpg">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="/src/style.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <aside class="demo-banner" aria-label="Demo controls">
+      <p><strong>Demo — sample data, nothing is saved</strong></p>
+      <div>
+        <button type="button" id="reset-demo">Reset demo</button>
+        <a href="/" id="start-real">Start for real</a>
+      </div>
+    </aside>
+    <header class="site-header">
+      <a class="wordmark" href="/" aria-label="Config Drift Timeline home">
+        <span class="registration-mark" aria-hidden="true">⊕</span><span>DRIFT/<wbr>LINE</span>
+      </a>
+      <nav aria-label="Primary navigation">
+        <a href="/">Home</a><a href="#sample">Sample timeline</a><a href="/privacy/">Privacy</a>
+      </nav>
+    </header>
+    <main id="main" class="demo-page">
+      <section class="demo-hero" aria-labelledby="demo-title">
+        <p class="eyebrow"><span>SAMPLE INCIDENT</span> / ISOLATED BROWSER DATA</p>
+        <h1 id="demo-title">Find the first sample configuration difference.</h1>
+        <p>For platform engineers checking how the CLI names a first difference and the person who introduced it.</p>
+        <p><a class="button button-primary" href="#sample">View the first capture</a></p>
+        <ul class="proof-list" aria-label="Sample facts">
+          <li>No configuration files are read</li>
+          <li>Sample state uses a separate demo key</li>
+          <li>Reset returns to the first capture</li>
+        </ul>
+      </section>
+
+      <section class="demo-section" id="sample" aria-labelledby="sample-title">
+        <div class="section-intro">
+          <p class="eyebrow">4 SAMPLE CAPTURES</p>
+          <h2 id="sample-title">Check the sample timeline.</h2>
+          <p>Use the buttons or arrow keys to compare each capture. The card names the state, source, and observed actor.</p>
+        </div>
+        <div class="demo-shell">
+          <div class="demo-controls">
+            <div class="demo-nav">
+              <button type="button" id="prev-step" aria-label="Previous capture">← <span>Previous</span></button>
+              <p id="step-count">Capture 1 of 4</p>
+              <button type="button" id="next-step"><span>Next</span> →</button>
+            </div>
+            <label for="timeline">Selected capture</label>
+            <input id="timeline" type="range" min="0" max="3" step="1" value="0" aria-describedby="timeline-hint">
+            <p class="hint" id="timeline-hint">Left and right arrow keys move through captures.</p>
+            <ol class="timeline-labels">
+              <li><button type="button" data-step="0" aria-current="step"><span>09:00</span><small>baseline</small></button></li>
+              <li><button type="button" data-step="1"><span>10:42</span><small>deploy</small></button></li>
+              <li><button type="button" data-step="2"><span>10:47</span><small>compare</small></button></li>
+              <li><button type="button" data-step="3"><span>11:18</span><small>resolved</small></button></li>
+            </ol>
+          </div>
+          <article class="evidence-card" aria-live="polite" aria-atomic="true">
+            <div class="evidence-head"><span class="state-stamp clean" id="event-state">ALIGNED</span><time id="event-time" datetime="2026-08-28T09:00:00Z">09:00:00 UTC</time></div>
+            <h3 id="event-key">No active drift</h3>
+            <p id="event-summary">Staging and production fingerprints match across 18 normalized keys.</p>
+            <dl class="comparison">
+              <div><dt>staging</dt><dd id="staging-value">18 / 18 aligned</dd><dd class="source" id="staging-source">release-184.yaml</dd></div>
+              <div><dt>production</dt><dd id="production-value">18 / 18 aligned</dd><dd class="source" id="production-source">release-184.yaml</dd></div>
+            </dl>
+            <p class="provenance" id="event-provenance"><strong>Observed after:</strong> deploy-bot captured production</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="demo-next" aria-labelledby="demo-next-title">
+        <h2 id="demo-next-title">Run the same sample in the CLI.</h2>
+        <pre aria-label="Run the bundled CLI demo"><code>driftline demo</code></pre>
+        <p>The command creates a new temporary directory and prints the report location. It does not read your files.</p>
+        <a class="button button-dark" href="/#install">Read the install steps</a>
+      </section>
+    </main>
+    <footer>
+      <a class="wordmark footer-mark" href="/" aria-label="Config Drift Timeline home"><span aria-hidden="true">⊕</span> DRIFT/LINE</a>
+      <p>Local evidence for configuration differences. Version 0.1.0.</p>
+      <nav aria-label="Footer navigation"><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="https://github.com/B-Divyesh/sf-config-drift-timeline">Source</a></nav>
+      <p>Built by Param Factory</p>
+    </footer>
+    <script type="module" src="/src/demo.ts"></script>
+  </body>
+</html>

@@ -2,5 +2,7 @@ http:
   port: 8080
 database:
   replica_count: 2
+cache:
+  region: eu-west-1
 payments:
   webhook_secret: example-staging-token

@@ -97,5 +97,9 @@ the exact deployment metadata is retained beside the source in
 `site/public/art/hero-drift.png.json`. License: released with this project
 under MIT.
 
+`site/public/art/social-preview.jpg` is a hand-composed 1200×630 center crop
+of that same project-owned hero, made locally with ImageMagick for social-card
+metadata. It introduces no new artwork or external license.
+
 Small arrows, registration marks, and status glyphs are hand-made in CSS or
 inline SVG, authored for this project, and covered by the repository license.

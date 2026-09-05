@@ -3,10 +3,19 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="A local-first CLI that shows when staging and production configuration drifted and who introduced it.">
+    <meta name="description" content="Find when staging and production configuration first differed, using redacted local snapshots.">
     <meta name="theme-color" content="#f4f0e6">
-    <title>Config Drift Timeline — Find when environments diverged</title>
+    <title>Config Drift Timeline — Find config differences</title>
     <link rel="canonical" href="https://config-drift-timeline.sociobot.in/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Config Drift Timeline — Find config differences">
+    <meta property="og:description" content="Find when staging and production configuration first differed, using redacted local snapshots.">
+    <meta property="og:url" content="https://config-drift-timeline.sociobot.in/">
+    <meta property="og:image" content="https://config-drift-timeline.sociobot.in/art/social-preview.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Config Drift Timeline — Find config differences">
+    <meta name="twitter:description" content="Find when staging and production configuration first differed, using redacted local snapshots.">
+    <meta name="twitter:image" content="https://config-drift-timeline.sociobot.in/art/social-preview.jpg">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="/src/style.css">
   </head>
@@ -21,22 +30,22 @@
         <span>DRIFT/<wbr>LINE</span>
       </a>
       <nav aria-label="Primary navigation">
-        <a href="#demo">Demo</a>
+        <a href="/demo/">Demo</a>
         <a href="#install">Install</a>
         <a href="#pro">Pro pack</a>
-        <a href="https://github.com/B-Divyesh/sf-config-drift-timeline">Source</a>
+        <a href="/privacy/">Privacy</a>
       </nav>
     </header>
 
     <main id="main">
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero-copy">
-          <p class="eyebrow"><span>LOCAL CLI</span> / RELEASE EVIDENCE</p>
-          <h1 id="hero-title">Find the first bad difference.</h1>
-          <p class="lede">Turn redacted config snapshots into a timeline that says when staging and production split—and who touched it last.</p>
+          <p class="eyebrow"><span>LOCAL CLI</span> / READ-ONLY SNAPSHOTS</p>
+          <h1 id="hero-title">Find the first bad configuration difference.</h1>
+          <p class="lede">For platform engineers who need to explain when staging and production first differed.</p>
           <div class="hero-actions">
-            <a class="button button-primary" href="#install">Install driftline</a>
-            <a class="text-link" href="#demo">Trace the seeded incident <span aria-hidden="true">↓</span></a>
+            <a class="button button-primary" href="/demo/">Try it with sample data</a>
+            <a class="text-link" href="#install">Then install the same CLI <span aria-hidden="true">↓</span></a>
           </div>
           <ul class="proof-list" aria-label="Product guarantees">
             <li>Values never enter the ledger</li>
@@ -46,7 +55,7 @@
         </div>
         <figure class="hero-art">
           <img src="/art/hero-drift.webp" width="1200" height="800" fetchpriority="high" alt="Two perforated configuration strips passing through a proofing machine, with one branch marked out of alignment in red.">
-          <figcaption>One change slips out of register. Driftline marks the first observable capture.</figcaption>
+          <figcaption>Staging and production strips show a configuration difference. The CLI marks its first observed capture.</figcaption>
         </figure>
       </section>
 
@@ -58,10 +67,12 @@
 
       <section class="demo-section" id="demo" aria-labelledby="demo-title">
         <div class="section-intro">
-          <p class="eyebrow">RECORDED INCIDENT / 4 CAPTURES</p>
-          <h2 id="demo-title">Scrub to the exact moment.</h2>
-          <p>The demo uses fake fingerprints and never reads your files. Use the arrow keys on the timeline or choose a capture.</p>
+          <p class="eyebrow">SAMPLE TIMELINE / 4 CAPTURES</p>
+          <h2 id="demo-title">See a sample drift timeline.</h2>
+          <p>This preview uses fixed sample fingerprints. Open the full sample to reset it or run the CLI demo.</p>
         </div>
+
+        <p><a class="button button-primary" href="/demo/">Open the full sample</a></p>
 
         <div class="demo-shell">
           <div class="demo-controls">
@@ -121,8 +132,20 @@
       <section class="install" id="install" aria-labelledby="install-title">
         <div class="section-intro inverted">
           <p class="eyebrow">RUST / SINGLE BINARY</p>
-          <h2 id="install-title">Keep the evidence on your machine.</h2>
+          <h2 id="install-title">Run the CLI on your machine.</h2>
           <p>Build from source today. Registry publishing is handled by the factory after release.</p>
+        </div>
+        <div class="terminal-recording" aria-labelledby="terminal-title">
+          <div class="code-title"><span id="terminal-title">TERMINAL RECORDING / BUNDLED SAMPLE</span></div>
+          <pre aria-label="Terminal recording of the bundled sample command"><code>$ driftline demo
+DEMO  Config Drift Timeline
+DRIFT TIMELINE  staging &lt;-&gt; production
+Snapshots: 2  Active unsafe: 3  Allowed: 0  Resolved: 0
+
+2026-08-28T10:42:00Z  INTRODUCED  database.replica_count [unsafe]
+  after priya captured production
+
+Demo report: /tmp/driftline-demo-…/drift-report.json</code></pre>
         </div>
         <div class="code-block">
           <div class="code-title"><span>INSTALL</span><button type="button" class="copy-button" data-copy="cargo install --git https://github.com/B-Divyesh/sf-config-drift-timeline config-drift-timeline">Copy command</button></div>
@@ -136,14 +159,14 @@
 
 driftline report --compare staging,production --fail-on-drift</code></pre>
         </div>
-        <p class="install-note"><span aria-hidden="true">●</span> Raw values are discarded before the ledger is written. JSON output remains free.</p>
+        <p class="install-note"><span aria-hidden="true">●</span> Run <code>driftline demo</code> for the bundled sample. Raw values are discarded before the ledger is written. JSON output remains free.</p>
       </section>
 
       <section class="pro-section" id="pro" aria-labelledby="pro-title">
         <div class="pro-copy">
           <p class="eyebrow">ONE-TIME / NO SUBSCRIPTION</p>
-          <h2 id="pro-title">The CLI is complete. Pro standardizes the follow-through.</h2>
-          <p>Keep capture, timeline analysis, JSON export, allowlists, and CI exit codes free. The $39 Pro incident pack adds reusable GitHub/GitLab rollout recipes, a team allowlist review checklist, and an incident dossier template.</p>
+          <h2 id="pro-title">Pro incident pack.</h2>
+          <p>Keep capture, timeline analysis, JSON export, allowlists, and CI exit codes free. The $39 Pro incident pack adds rollout recipes, a review checklist, and an incident dossier template.</p>
           <ul>
             <li>One-time purchase, usable by one person on their devices</li>
             <li>Works offline after a successful license check</li>
@@ -171,12 +194,13 @@ driftline report --compare staging,production --fail-on-drift</code></pre>
 
     <footer>
       <a class="wordmark footer-mark" href="/" aria-label="Config Drift Timeline home"><span aria-hidden="true">⊕</span> DRIFT/LINE</a>
-      <p>Local evidence for the moment environments stop matching.</p>
+      <p>Local evidence for configuration differences. Version 0.1.0.</p>
       <nav aria-label="Footer navigation">
         <a href="https://github.com/B-Divyesh/sf-config-drift-timeline">Source</a>
         <a href="/privacy/">Privacy</a>
         <a href="/terms/">Terms</a>
       </nav>
+      <p>Built by Param Factory</p>
     </footer>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
     <script type="module" src="/src/main.ts"></script>

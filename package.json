@@ -9,9 +9,11 @@
     "build:cli": "cargo build --release",
     "build": "npm run build:cli && npm run build:site",
     "typecheck": "tsc --noEmit --project site/tsconfig.json",
-    "test:site": "node --test site/tests/site.test.mjs",
+    "test:site": "npm run build:site && node --test site/tests/site.test.mjs",
+    "test:consumer": "node site/tests/consumer-demo.mjs",
+    "test:claims": "npm run build:site && node site/tests/run-claims.mjs",
     "test:e2e": "npm run build:site && node site/tests/e2e.mjs",
-    "test": "cargo test && npm run test:site && npm run test:e2e"
+    "test": "cargo test && npm run test:site && npm run test:consumer && npm run test:claims && npm run test:e2e"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.10.2",
