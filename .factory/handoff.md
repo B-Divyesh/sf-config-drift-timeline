@@ -1,3 +1,37 @@
+# Review handoff — config-drift-timeline-review-1
+
+## Status: FAIL
+
+Reviewed implementation `018832020c68ab5540be0a57aea323102748f5e4`; documentation HEAD is `5f5515b031ca88ebff03ba1407c7da3e3b6999d5`. The production site exactly matches a fresh build of this checkout for root HTML, JavaScript, and CSS.
+
+The core CLI, package install, local test/build/package gates, live desktop/mobile accessibility checks, privacy request check, PWA offline reload, immutable hashed caching, and fail-closed checkout behavior pass. The current product cannot pass review because it lacks the required installed-CLI demo sandbox and browser demo controls, has no `.factory/claims.json` (15 public claim categories are untested), and serves unknown paths as a 200 landing page rather than a designed 404. Required route social/canonical metadata is also incomplete.
+
+No product code was changed in this review. Full findings, commands, browser evidence, and earlier-finding disposition are in `.factory/review-1.md`.
+
+## How to verify
+
+```sh
+npm ci
+npm audit --audit-level=high
+npm run typecheck
+npm test
+npm run build
+cargo fmt --all -- --check
+cargo clippy --all-targets --all-features -- -D warnings
+cargo package
+```
+
+Install `target/package/config-drift-timeline-0.1.0` into a new Cargo root and run the documented capture/report flow. The review deliberately also ran `driftline --demo` and `driftline demo`; both currently exit 2, which is the main unresolved demo finding.
+
+## Next steps
+
+1. Implement and document the isolated CLI/browser demo contract, then add clean-consumer tests.
+2. Add a complete claims manifest and one tagged observable test per public claim.
+3. Add the designed 404 route/response override and complete per-route metadata.
+4. Re-run an independent review after those product changes are deployed.
+
+---
+
 # Verification handoff — config-drift-timeline-verify-3
 
 ## Release status: PASS
