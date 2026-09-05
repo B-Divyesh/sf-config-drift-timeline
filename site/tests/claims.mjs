@@ -60,7 +60,7 @@ test('@claim:raw-values-redacted bundled sample ledger and report contain finger
     const report = readFileSync(paths.report, 'utf8');
     assert.match(ledger, /sha256:/);
     assert.match(report, /"state": "secret"/);
-    assert.doesNotMatch(`${ledger}\n${report}`, /example-staging-token/);
+    assert.doesNotMatch(`${ledger}\n${report}`, /example-(staging|production)-token/);
   } finally { removeDemo(paths); }
 });
 
@@ -185,6 +185,10 @@ test('@claim:offline-cached-license a previously verified license unlocks the pa
   const page = await context.newPage();
   await page.goto(`${baseUrl}/`, { waitUntil: 'networkidle' });
   await page.getByRole('button', { name: 'Download Pro incident pack' }).waitFor();
+  await page.evaluate(() => navigator.serviceWorker.ready);
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.getByRole('button', { name: 'Download Pro incident pack' }).waitFor();
+  await page.waitForFunction(() => navigator.serviceWorker.controller !== null);
   await context.setOffline(true);
   await page.reload({ waitUntil: 'domcontentloaded' });
   await page.getByText('Pro unlocked offline using the last verified license.').waitFor();
